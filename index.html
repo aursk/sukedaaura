@@ -1,32 +1,48 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>数字当てゲーム</title>
+  <title>Hit & Blow</title>
 </head>
 <body>
-  <h1>数字当てゲーム</h1>
-  <p>1〜100の数字を当てて！</p>
 
-  <input id="guess" type="number">
-  <button onclick="check()">決定</button>
+<h1>Hit & Blowゲーム</h1>
+<p>3桁の数字を当てて！（重複なし）</p>
 
-  <p id="result"></p>
+<input id="guess" maxlength="3">
+<button onclick="check()">決定</button>
 
-  <script>
-    let answer = Math.floor(Math.random() * 100) + 1;
+<p id="result"></p>
 
-    function check() {
-      let guess = document.getElementById("guess").value;
-      let result = document.getElementById("result");
+<script>
+let numbers = "0123456789".split("");
+numbers.sort(() => Math.random() - 0.5);
+let answer = numbers.slice(0,3);
 
-      if (guess == answer) {
-        result.textContent = "正解！🎉";
-      } else if (guess > answer) {
-        result.textContent = "もっと小さい！";
-      } else {
-        result.textContent = "もっと大きい！";
-      }
+function check() {
+  let guess = document.getElementById("guess").value.split("");
+  let hit = 0;
+  let blow = 0;
+
+  if (guess.length != 3) {
+    document.getElementById("result").textContent = "3桁で入力して！";
+    return;
+  }
+
+  for (let i = 0; i < 3; i++) {
+    if (guess[i] === answer[i]) {
+      hit++;
+    } else if (answer.includes(guess[i])) {
+      blow++;
     }
-  </script>
+  }
+
+  if (hit === 3) {
+    document.getElementById("result").textContent = "正解！🎉";
+  } else {
+    document.getElementById("result").textContent = hit + " Hit, " + blow + " Blow";
+  }
+}
+</script>
+
 </body>
 </html>
