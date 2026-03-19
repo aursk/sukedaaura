@@ -18,7 +18,7 @@
 
     .card {
       background: white;
-      padding: 30px;
+      padding: 25px;
       border-radius: 20px;
       width: 90%;
       max-width: 380px;
@@ -28,7 +28,7 @@
 
     h1 {
       margin-bottom: 10px;
-      font-size: 28px;
+      font-size: 26px;
     }
 
     .desc {
@@ -64,9 +64,48 @@
     }
 
     #result {
-      margin-top: 20px;
+      margin-top: 15px;
       font-weight: bold;
       font-size: 20px;
+    }
+
+    #history {
+      margin-top: 15px;
+      text-align: left;
+      max-height: 150px;
+      overflow-y: auto;
+      font-size: 14px;
+      border-top: 1px solid #ddd;
+      padding-top: 10px;
+    }
+
+    .history-item {
+      margin-bottom: 5px;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.5); opacity: 0; }
+      60% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+
+    .clear {
+      animation: pop 0.5s ease;
+      color: #ff4d6d;
+    }
+
+    .confetti {
+      position: fixed;
+      top: -10px;
+      width: 8px;
+      height: 8px;
+      animation: fall 2s linear forwards;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+      }
     }
   </style>
 </head>
@@ -83,10 +122,10 @@
   </p>
 
   <input id="guess" maxlength="3" placeholder="例: 123">
-
   <button onclick="check()">決定</button>
 
   <p id="result"></p>
+  <div id="history"></div>
 </div>
 
 <script>
@@ -95,8 +134,16 @@ numbers.sort(() => Math.random() - 0.5);
 let answer = numbers.slice(0,3);
 let attempts = 0;
 
+// 🔥 Enterキー対応
+document.getElementById("guess").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    check();
+  }
+});
+
 function check() {
-  let guess = document.getElementById("guess").value;
+  let guessInput = document.getElementById("guess");
+  let guess = guessInput.value;
 
   if (guess.length !== 3 || isNaN(guess)) {
     document.getElementById("result").textContent = "3桁の数字で入力して！";
@@ -117,12 +164,36 @@ function check() {
 
   attempts++;
 
+  let result = document.getElementById("result");
+
+  // 履歴追加
+  let history = document.getElementById("history");
+  let item = document.createElement("div");
+  item.className = "history-item";
+  item.textContent = attempts + "回目： " + guess + " → " + hit + " Hit / " + blow + " Blow";
+  history.prepend(item);
+
   if (hit === 3) {
-    document.getElementById("result").textContent =
-      "正解！🎉 " + attempts + "回でクリア！";
+    result.textContent = "正解！🎉 " + attempts + "回でクリア！";
+    result.classList.add("clear");
+    launchConfetti();
   } else {
-    document.getElementById("result").textContent =
+    result.textContent =
       hit + " Hit / " + blow + " Blow（" + attempts + "回）";
+  }
+
+  // 入力を空にする（便利）
+  guessInput.value = "";
+}
+
+function launchConfetti() {
+  for (let i = 0; i < 30; i++) {
+    let c = document.createElement("div");
+    c.className = "confetti";
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.background = "hsl(" + Math.random() * 360 + ",100%,50%)";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 2000);
   }
 }
 </script>
