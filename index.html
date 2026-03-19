@@ -1,41 +1,32 @@
-import random
+<!DOCTYPE html>
+<html>
+<head>
+  <title>数字当てゲーム</title>
+</head>
+<body>
+  <h1>数字当てゲーム</h1>
+  <p>1〜100の数字を当てて！</p>
 
-def generate_number():
-    numbers = list("0123456789")
-    random.shuffle(numbers)
-    return numbers[:3]
+  <input id="guess" type="number">
+  <button onclick="check()">決定</button>
 
-def check(guess, answer):
-    hit = 0
-    blow = 0
-    for i in range(3):
-        if guess[i] == answer[i]:
-            hit += 1
-        elif guess[i] in answer:
-            blow += 1
-    return hit, blow
+  <p id="result"></p>
 
-def game():
-    answer = generate_number()
-    attempts = 0
+  <script>
+    let answer = Math.floor(Math.random() * 100) + 1;
 
-    print("=== 数字推理ゲーム ===")
-    print("3桁の数字を当ててね！（例：123）")
+    function check() {
+      let guess = document.getElementById("guess").value;
+      let result = document.getElementById("result");
 
-    while True:
-        guess = list(input("入力："))
-
-        if len(guess) != 3 or not all(g.isdigit() for g in guess):
-            print("3桁の数字を入力してね！")
-            continue
-
-        attempts += 1
-        hit, blow = check(guess, answer)
-
-        print(f"{hit} Hit, {blow} Blow")
-
-        if hit == 3:
-            print(f"正解！{attempts}回でクリア！🎉")
-            break
-
-game()
+      if (guess == answer) {
+        result.textContent = "正解！🎉";
+      } else if (guess > answer) {
+        result.textContent = "もっと小さい！";
+      } else {
+        result.textContent = "もっと大きい！";
+      }
+    }
+  </script>
+</body>
+</html>
