@@ -1,45 +1,113 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hit & Blow</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      width: 90%;
+      max-width: 350px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      margin-bottom: 10px;
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      background: #667eea;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #5a67d8;
+    }
+
+    #result {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+  </style>
 </head>
+
 <body>
 
-<h1>Hit & Blowゲーム</h1>
-<p>3桁の数字を当てて！（重複なし）</p>
+<div class="card">
+  <h1>Hit & Blow</h1>
+  <p>3桁の数字を当てて！（重複なし）</p>
 
-<input id="guess" maxlength="3">
-<button onclick="check()">決定</button>
+  <input id="guess" maxlength="3" placeholder="例: 123">
+  <br>
+  <button onclick="check()">決定</button>
 
-<p id="result"></p>
+  <p id="result"></p>
+</div>
 
 <script>
 let numbers = "0123456789".split("");
 numbers.sort(() => Math.random() - 0.5);
 let answer = numbers.slice(0,3);
+let attempts = 0;
 
 function check() {
-  let guess = document.getElementById("guess").value.split("");
-  let hit = 0;
-  let blow = 0;
+  let guess = document.getElementById("guess").value;
 
-  if (guess.length != 3) {
-    document.getElementById("result").textContent = "3桁で入力して！";
+  if (guess.length !== 3 || isNaN(guess)) {
+    document.getElementById("result").textContent = "3桁の数字で入力して！";
     return;
   }
 
+  let guessArr = guess.split("");
+  let hit = 0;
+  let blow = 0;
+
   for (let i = 0; i < 3; i++) {
-    if (guess[i] === answer[i]) {
+    if (guessArr[i] === answer[i]) {
       hit++;
-    } else if (answer.includes(guess[i])) {
+    } else if (answer.includes(guessArr[i])) {
       blow++;
     }
   }
 
+  attempts++;
+
   if (hit === 3) {
-    document.getElementById("result").textContent = "正解！🎉";
+    document.getElementById("result").textContent =
+      "正解！🎉 " + attempts + "回でクリア！";
   } else {
-    document.getElementById("result").textContent = hit + " Hit, " + blow + " Blow";
+    document.getElementById("result").textContent =
+      hit + " Hit, " + blow + " Blow（" + attempts + "回）";
   }
 }
 </script>
