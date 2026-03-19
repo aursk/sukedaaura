@@ -21,30 +21,39 @@
       padding: 30px;
       border-radius: 20px;
       width: 90%;
-      max-width: 350px;
+      max-width: 380px;
       text-align: center;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2);
     }
 
     h1 {
       margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .desc {
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 15px;
+      line-height: 1.5;
     }
 
     input {
-      width: 80%;
-      padding: 10px;
-      font-size: 18px;
-      border-radius: 10px;
+      width: 90%;
+      padding: 15px;
+      font-size: 22px;
+      border-radius: 12px;
       border: 1px solid #ccc;
-      margin-bottom: 10px;
       text-align: center;
+      margin-bottom: 15px;
     }
 
     button {
-      padding: 10px 20px;
-      font-size: 16px;
+      width: 90%;
+      padding: 15px;
+      font-size: 18px;
       border: none;
-      border-radius: 10px;
+      border-radius: 12px;
       background: #667eea;
       color: white;
       cursor: pointer;
@@ -55,8 +64,9 @@
     }
 
     #result {
-      margin-top: 15px;
+      margin-top: 20px;
       font-weight: bold;
+      font-size: 20px;
     }
   </style>
 </head>
@@ -65,10 +75,15 @@
 
 <div class="card">
   <h1>Hit & Blow</h1>
-  <p>3桁の数字を当てて！（重複なし）</p>
+
+  <p class="desc">
+    3桁の数字を当てよう！（重複なし）<br>
+    Hit：数字も場所も正しい<br>
+    Blow：数字は合ってるけど場所が違う
+  </p>
 
   <input id="guess" maxlength="3" placeholder="例: 123">
-  <br>
+
   <button onclick="check()">決定</button>
 
   <p id="result"></p>
@@ -107,7 +122,7 @@ function check() {
       "正解！🎉 " + attempts + "回でクリア！";
   } else {
     document.getElementById("result").textContent =
-      hit + " Hit, " + blow + " Blow（" + attempts + "回）";
+      hit + " Hit / " + blow + " Blow（" + attempts + "回）";
   }
 }
 </script>
